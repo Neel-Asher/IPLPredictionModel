@@ -17,12 +17,7 @@ def clean_string_values(df):
 
     for column in string_columns:
 
-        df[column] = (
-            df[column]
-            .astype(str)
-            .str.strip()
-        )
-
+        df[column] = (df[column].astype(str).str.strip())
         df[column] = df[column].replace(['NA', 'nan', 'None', ''],np.nan)
 
     return df
