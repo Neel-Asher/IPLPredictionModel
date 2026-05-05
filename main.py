@@ -14,6 +14,17 @@ MATCHES_PATH = "data/raw/matches.csv"
 
 def build_dataset():
 
+    """
+    Builds the dataset by loading, cleaning, and merging the deliveries and matches data.
+    The function performs the following steps:
+        1. Loads the deliveries and matches data from the specified paths.
+        2. Cleans the column names of both DataFrames for consistency.
+        3. Cleans string values in both DataFrames by stripping whitespace and replacing common placeholders for missing values with NaN.
+        4. Merges the deliveries and matches DataFrames on the 'match_id' and 'id' columns, respectively, to create a single DataFrame that contains all relevant information for feature engineering and model training.
+    Returns:
+        pd.DataFrame: A merged and cleaned DataFrame ready for feature engineering and model training.  
+    """
+
     deliveries_df = load_deliveries_data(DELIVERIES_PATH)
     matches_df = load_matches_data(MATCHES_PATH)
 
@@ -55,6 +66,19 @@ def build_dataset():
 
 def train_pipeline(df):
 
+    """
+    Trains the machine learning model using the provided DataFrame by performing the following steps:
+        1. Defines the feature columns and target variable for model training.
+        2. Splits the data into training and testing sets using an 80-20 split.
+        3. Trains a Random Forest Regressor model on the training data.
+        4. Evaluates the model's performance on the test data by calculating key regression metrics (MAE, RMSE, R2) and printing the results.
+        5. Saves the trained model to disk for future use.
+    Parameters:
+        df (pd.DataFrame): The DataFrame containing the data for training.  
+    Returns:
+        tuple: A tuple containing the trained model, the list of feature columns, and the original DataFrame used for training.
+    """
+
     feature_columns = [
         "economy",
         "dot_ball_percentage",
@@ -81,8 +105,25 @@ def train_pipeline(df):
 
     return model, feature_columns, df
 
-
 def prediction_pipeline(df, model, feature_columns):
+
+    """
+    Predicts the economy for the next season using the trained model and identifies the top 5 bowlers with the lowest predicted economy rates. The function performs the following steps:
+        1. Filters the input DataFrame to include only data from the latest season.
+        2. Prepares the feature set for the latest season using the specified feature columns.
+        3. Uses the trained model to predict the economy for the latest season.
+        4. Adds the predicted economy values to the latest season DataFrame.
+        5. Sorts the DataFrame by predicted economy in ascending order and selects the top 5 bowlers with the lowest predicted economy rates.
+        6. Prints the top 5 bowlers and their predicted economy rates.
+        7. Saves the top 5 predictions to a CSV file in the output directory.
+        8. Creates a scatter plot of the top 5 bowlers and their predicted economy rates, highlighting the best predicted bowler and the average economy rate, and saves the plot to the output directory.
+    Parameters:
+        df (pd.DataFrame): The original DataFrame containing the data for prediction.
+        model (object): The trained machine learning model to be used for prediction.
+        feature_columns (list): A list of column names to be used as features for prediction.
+    Returns:
+        None
+    """
 
     latest_season_df = df[
         df["season"] == df["season"].max()
@@ -233,7 +274,19 @@ def prediction_pipeline(df, model, feature_columns):
 
     print(f"\nScatter plot saved to: {plot_path}")
 
-def main():
+def main(): 
+
+    """
+    Main function to execute the entire pipeline for building the dataset, training the model, and making predictions for the next season. The function performs the following steps:
+        1. Builds the dataset by loading, cleaning, and merging the deliveries and matches data
+        2. Trains the machine learning model using the built dataset and evaluates its performance.
+        3. Loads the trained model from disk and uses it to predict the economy for the next season.
+        4. Identifies the top 5 bowlers with the lowest predicted economy rates and saves the results to a CSV file and a scatter plot in the output directory.
+    Parameters:
+        None
+    Returns:
+        None
+    """
 
     df = build_dataset()
     model, feature_columns, df = train_pipeline(df)
