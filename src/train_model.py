@@ -6,7 +6,8 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 def train_model(X_train, y_train):
 
     """
-    Trains a Random Forest Regressor model using the provided training data (X_train and y_train). The function initializes the model with specified hyperparameters, fits the model to the training data, and returns the trained model. The hyperparameters used in this implementation include:
+    Trains a Random Forest Regressor model using the provided training data (X_train and y_train). The function initializes the model with specified hyperparameters, 
+    fits the model to the training data, and returns the trained model. The hyperparameters used in this implementation include:
         - n_estimators: The number of trees in the forest (set to 200). 
         - random_state: A seed value for reproducibility (set to 42).
         - n_jobs: The number of jobs to run in parallel for both fit and predict (set to -1 to use all available processors).
@@ -54,6 +55,13 @@ def evaluate_model(model, X_test, y_test):
 
 def save_model(model, path="models/random_forest_model.pkl"):
 
+    """
+    Saves the trained model to the specified path.
+    Parameters:
+        model (RandomForestRegressor): The trained Random Forest Regressor model to be saved.
+        path (str): The file path where the model will be saved.
+    """
+    
     os.makedirs(os.path.dirname(path), exist_ok=True)
     joblib.dump(model, path)
     print(f"\nModel saved at: {path}")
