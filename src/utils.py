@@ -1,7 +1,10 @@
 def merge_datasets(deliveries_df, matches_df):
 
     """
-    Merges the deliveries and matches DataFrames on the 'match_id' and 'id' columns, respectively, to create a single DataFrame that contains all relevant information for feature engineering and model training. The function performs a left join to ensure that all deliveries are retained in the merged DataFrame, even if there is no corresponding match information available.
+    Merges the deliveries and matches DataFrames on the 'match_id' and 'id' columns, respectively, 
+    to create a single DataFrame that contains all relevant information for feature engineering and 
+    model training. The function performs a left join to ensure that all deliveries are retained 
+    in the merged DataFrame, even if there is no corresponding match information available.
     Parameters:
         deliveries_df (pd.DataFrame): The DataFrame containing delivery-level data.
         matches_df (pd.DataFrame): The DataFrame containing match-level data.
